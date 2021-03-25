@@ -1,16 +1,22 @@
 # Nom du projet
+Projet fourmilière
+
+Notre projet a pour but de modéliser numériquement le fonctionnement d’une fourmilière, super-organisme composé de milliers voire millions d’individus simples mais capable d’organisation interne, d’innovation et d’optimisation. Pour cela, nous devons trouver les interactions, mécanismes organisationnels permettant aux fourmis de faire naître un super-organisme résilient.
 
 Résumé de quelques lignes présentant l'objectif de votre projet, la méthode que vous avez suivie pour le réaliser et les résultats marquants que vous avez obtenus.
 
 ## English version
 
-Un titre et un résumé en anglais qui reprennent le titre et le résumé en français, mais en anglais pour attirer une audience internationale sur vos travaux !
+Anthill project
+
+Our project aims to model the functioning of an anthill, a super-organism made up of thousands or even millions of simple individuals but capable of internal organization, innovation and optimization. For that, we must find the interactions, organizational mechanisms allowing the ants to create a resilient superorganism.
+ 
 
 ## Présentation de l'équipe
 
 |(´・ω・｀)| ( ͡° ͜ʖ ͡°) | ಠ_ಠ | ᕕ( ᐛ )ᕗ |
 |-----|--|--|--|
-| P. Bismuth| J. Doe | A. Onyme  | N. Nescio  |
+| N. Pons | H. Allemand | A. Leschallier  | T. Drouard  |
 
 
 ## Description synthétique du projet
@@ -28,6 +34,7 @@ Quels sont les interactions, mécanismes organisationnels permettant aux fourmis
 **Hypothèses secondaires :** 
 
 **Objectifs :**
+ modéliser numériquement le fonctionnement d’une fourmilière
 
 **Critère(s) d'évaluation :**
 pour s’assurer de la pertinence de la modélisation, nous comparerons le résultat des interactions modélisées au comportement véritable des fourmis dans une fourmilière. (À détailler par des mesures précises)
