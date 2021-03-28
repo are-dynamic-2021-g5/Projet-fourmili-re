@@ -7,7 +7,7 @@
 
 
 ### Semaine 2 
-Réalisation de l'index par Timéo, Nicolas a réalisé une étude documentaire nécéssaire au travail documentaire ainsi qu'une amélioration du code de la fourmilière , et Alban s'est occupé de la mise en forme du travail documentaire tout veillant a la mise à jour du blog
+Réalisation de l'index, travail documentaire et recherche bibliographique pour affiner notre précision.Nous avons conçu un code de génération des fourmis, de déplacement aléatoire d'une fourmi et d'un essaim, ainsi que des améliorations graphiques, tout en résolvant quelques failles du code.
 ### Semaine 3
 ### ...
 
