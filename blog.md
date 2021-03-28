@@ -7,6 +7,7 @@
 
 
 ### Semaine 2 
+Réalisation de l'index par Timéo, Nicolas a réalisé une étude documentaire nécéssaire au travail documentaire ainsi qu'une amélioration du code de la fourmilière , et Alban s'est occupé de la mise en forme du travail documentaire tout veillant a la mise à jour du blog
 ### Semaine 3
 ### ...
 
