@@ -60,11 +60,14 @@ Pour s’assurer de la pertinence de la modélisation, nous comparerons le résu
 
 
 
-**Explication du code**
+### Explication du code
 
 Tout d'abord nous avons listé l'ensemble des paramètres que nous allions utilisés et, au besoin, modifié. On a donc regroupé l'ensemble de ceux-ci dans une même case.
 
-# Paramètres
+![image](https://user-images.githubusercontent.com/80055517/117018918-4173b880-acf5-11eb-980d-8320636e688d.png)
+
+
+**Paramètres**
 n = m = 18 # nombre de lignes = nombre de colonnes de la matrice
 initial_size = 2 # taille de la fourmilière initiale
 max_food_quantity = 20 #quantité maximale de nourriture par source de nourriture
