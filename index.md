@@ -70,127 +70,65 @@ Tout d'abord nous avons listé l'ensemble des paramètres que nous allions utili
 
 Ensuite nous avons conçu une fonction de base qui permettait de générer un monde avec de la nourriture et des pièges, support de toutes les autres fonctions. Elle crée l'univers en quelque sorte.
 
-**def generate_simple_map(n, m, nb_trap): # n : lignes m : colonnes**
-
-   """Préconditions : m > 0 et n > 0, initial_size > 0
-
-   Renvoie un monde de taille n*m avec une fourmilière au centre et un point de nourriture en périphérie"""
-
-    map = np.array([[" " for i in range(0, n)] for j in range(0, n)]) 
-   
-   On crée la matrice vide (avec des " " partout)
-
-   **On crée la fourmilière au centre
-
+def generate_simple_map(n, m, nb_trap): # n : lignes m : colonnes
+    """Préconditions : m > 0 et n > 0, initial_size > 0
+    Renvoie un monde de taille n*m avec une fourmilière au centre et un point de nourriture en périphérie"""
+    map = np.array([[" " for i in range(0, n)] for j in range(0, n)]) # on crée la matrice vide (avec des " " partout)
+    # on crée la fourmilière au centre
     for i in range(0, initial_size):
-
         for k in range(0, initial_size):
-
-            map = np.delete(map, m*(n//2 - initial_size//2 + i) + m//2 - initial_size//2 + k) 
-On copie le monde en enlevant une à une les cases du carré de taille initial_size situé au centre
-
-            map = np.insert(map, m*(n//2 - initial_size//2 + i) + m//2 - initial_size//2 + k, "h") 
-On remplace les cases initialement vide (avec un " ") par une case "fourmilière" (avec un "h" pour "home")
-
+            map = np.delete(map, m*(n//2 - initial_size//2 + i) + m//2 - initial_size//2 + k) #on copie le monde en enlevant une à une les cases du carré de taille initial_size situé au centre
+            map = np.insert(map, m*(n//2 - initial_size//2 + i) + m//2 - initial_size//2 + k, "h") #on remplace les cases initialement vide (avec un " ") par une case "fourmilière" (avec un "h" pour "home")
             map = np.array([[map[m*j + i] for i in range(0, m)] for j in range(0, n) ])
-
-   **On crée un point de nourriture
-
-    food_line = random.randint(0, 2*n//5 - 1) 
-   On définit ainsi la périphérie comme étant les cases du bord de la matrice avec un largeur de n/5
-
+    
+    # on crée un point de nourriture
+    food_line = random.randint(0, 2*n//5 - 1) # on définit ainsi la périphérie comme étant les cases du bord de la matrice avec un largeur de n/5
     food_column = random.randint(0, 2*m//5 - 1)
-
-    if food_line > n//5 - 1: 
-   On est sur la périphérie du bas
-
+    if food_line > n//5 - 1: # on est sur la périphérie du bas
         food_line = n - 2 - n//5 + food_line
-
-    if food_column > m//5 - 1: 
-   On est sur la périphérie de droite
-
+    if food_column > m//5 - 1: # on est sur la périphérie de droite
         food_column = m - 2 - m//5 + food_column
-
-    where = random.sample([food_line, food_column], 1) 
-   On définit une périphérie où se mettre (horizontale ou verticale)
-
-    if where == food_line: 
-   On est sur une périphérie en haut ou en bas
-
-        food_column = random.randint(0, m - 1)
-On définit une case au hasard sur cette périphérie
-
-    else : 
-   On est sur une périphérie latérale
-
-        food_line = random.randint(0, n - 1) 
-On définit une case au hasard sur cette périphérie
-
+    where = random.sample([food_line, food_column], 1) # on définit une périphérie où se mettre (horizontale ou verticale)
+    if where == food_line: # on est sur une périphérie en haut ou en bas
+        food_column = random.randint(0, m - 1) # on définit une case au hasard sur cette périphérie
+    else : #on est sur une périphérie latérale
+        food_line = random.randint(0, n - 1) # on définit une case au hasard sur cette périphérie
     map = np.delete(map, m*food_line + food_column)
-
     map = np.insert(map, m*food_line + food_column, "n")
-
     map = np.array([[map[m*j + i] for i in range(0, m)] for j in range(0, n)])
-
     
-
-   **Carte de la nourriture**
-
+    #carte de la nourriture
     food_quantity = random.randint(5, max_food_quantity)
-
     food_map = np.array([[0 for i in range(0, m)] for j in range(0, n)])
-
     food_map = np.delete(food_map, m*food_line + food_column)
-
     food_map = np.insert(food_map, m*food_line + food_column, food_quantity)
-
     food_map = np.array([[food_map[m*j + i] for i in range(0, m)] for j in range(0, n)])    
-
-   **Ajout de pièges mortel pour fourmis**
-
-    for i in range(0,nb_trap):  
-
-        trap_line = random.randint(0, 2*n//3 - 1) 
-
-        trap_column = random.randint(0, 2*m//3 - 1)
-
-        if trap_line > n//3 - 1:
-
-            trap_line = n - 2 - n//3 + trap_line -4
-
-        if trap_column > m//3 - 1: 
-
-            trap_column = m - 2 - m//3 + trap_column -4
-
-        where = random.sample([trap_line, trap_column], 1) 
-
-        if where == trap_line:
-
-            trap_column = random.randint(0, m - 1) 
-
-        else : 
-
-            trap_line = random.randint(0, n - 1) 
-
-        trap = 'p' 
-
-        map = np.delete(map, m*trap_line + trap_column)
-
-        map = np.insert(map, m*trap_line + trap_column, trap)
-
-        map = np.array([[map[m*j + i] for i in range(0, m)] for j in range(0, n) ])
-
+        
+     #ajout de pièges mortel pour fourmis
     
-
+    for i in range(0,nb_trap):  
+        trap_line = random.randint(0, 2*n//3 - 1) 
+        trap_column = random.randint(0, 2*m//3 - 1)
+        if trap_line > n//3 - 1:
+            trap_line = n - 2 - n//3 + trap_line -4
+        if trap_column > m//3 - 1: 
+            trap_column = m - 2 - m//3 + trap_column -4
+        where = random.sample([trap_line, trap_column], 1) 
+        if where == trap_line:
+            trap_column = random.randint(0, m - 1) 
+        else : 
+            trap_line = random.randint(0, n - 1) 
+        trap = 'p' 
+        map = np.delete(map, m*trap_line + trap_column)
+        map = np.insert(map, m*trap_line + trap_column, trap)
+        map = np.array([[map[m*j + i] for i in range(0, m)] for j in range(0, n) ])
+    
     print(map)
-
     print(food_map)
-
     return [map, food_map]
+    print (generate_simple_map(n, m, nb_trap))
 
-print (generate_simple_map(n, m, nb_trap))
-
-​
+Les 'p' sont deonc des pièges, le 'n' la source de nourriture et les 'h' les cases fourmilières.
 
 [[' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
  [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
@@ -198,7 +136,7 @@ print (generate_simple_map(n, m, nb_trap))
  [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
  [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
  [' ' ' ' ' ' ' ' ' ' 'p' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
- [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 'p' ' ']	Les 'p' sont deonc des pièges, le 'n' la source de nourriture et les 'h' les cases fourmilières.
+ [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 'p' ' ']
  [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
  [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 'h' 'h' ' ' ' ' ' ' 'p' ' ' ' ' ' ' ' ']
  [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 'h' 'h' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
