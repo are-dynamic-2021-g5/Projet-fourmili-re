@@ -1041,19 +1041,101 @@ Il ne reste plus qu'à assembler le tout dans la fonction **simulation**
 
 ### Présensentation et analyse des résultats
 
-tour :
-55
-sim_map :
-[[' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
- [' ' ' ' ' ' ' ' ' ' 'p' ' ' ' ' ' ' ' ']
- [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
- [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
- [' ' ' ' ' ' ' ' 'h' 'h' ' ' ' ' ' ' ' ']
- [' ' ' ' 'f' ' ' 'h' 'h' ' ' ' ' ' ' ' ']
- [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
- ['n' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
- [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
- [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']]
+Notre premier objectif était de modéliser le déplacement des fourmis et l'organisation de leur chemin non pas grâce à une mémoire mais grâce aux phéromones laissées derrière elles. Après de multiples tentatives et modifications  du code (en particulier **choose_the_way**), nous avons réussi a obtenir ce comportement d'abord pour une fourmi puis pour plusieurs.
+
+Exemple 1 :
+
+![image](https://user-images.githubusercontent.com/80055517/117061111-18b5e800-ad22-11eb-8252-5547f3ae145a.png)
+
+On part de cette situation qui est la situation après déjà 55 tours de simulation. La première carte est la carte fourmis, la deuxième, celle des phéromones maison et la troisième, celle des phéromones nourriture (les horloges et la nouriture ne sont pas intéressantes à regarder pour cet exemple).
+
+![image](https://user-images.githubusercontent.com/80055517/117061511-97128a00-ad22-11eb-8217-1182d4123842.png)
+
+La fourmi trouve la nourriture.
+
+![image](https://user-images.githubusercontent.com/80055517/117061708-ccb77300-ad22-11eb-87c8-8a5256e9e1b3.png)
+
+Elle suit alors les phéromones maison qu'elle a laissées. On peut voir le chemin qu'elle a pris sur la carte des phéromones nourriture.
+
+![image](https://user-images.githubusercontent.com/80055517/117061974-1d2ed080-ad23-11eb-9ad4-a2b852fa53a6.png)
+
+Elle continue gentillement son périple... jusqu'au blocage.
+
+![image](https://user-images.githubusercontent.com/80055517/117062079-4b141500-ad23-11eb-83bf-1a18b82c42fb.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117062120-59fac780-ad23-11eb-86c3-4eb74b54e7e3.png)
+
+On voit à ce moment que la fourmi alterne entre deux cases tout simplement parce que lorsqu'elle est sur la case du haut elle se déplace sur la case à la deuxième plus grande valeur de phéromone (qui est celle d'en dessous), et que sur la case du dessous, elle se déplace sur la case avec une valeu de phéromone inférieure de un (soit la case du dessus).
+Cependant le facteur d'exploration (ici égale à 1/10 c'est à dire que tous les 10 tours la fourmi fait un déplacement aléatoire) permet de débloquer la situation. Ainsi, alors qu'il est censé optimiser les chemins dans la nature, il nous permet ici de simplement trouver un chemin. Ce facteur "d'erreur" permet de rendre le comportement des fourmis plus "naturel" en quelque sorte.
+
+![image](https://user-images.githubusercontent.com/80055517/117062847-41d77800-ad24-11eb-9883-9d209efc06fd.png)
+
+Après un autre blocage à cause de la disposition des phéromones et déblocage grâce au facteur d'exploration, elle arrive à la fourmilière et dépose la nourriture. On peut suivre le chemin qu'elle a suivi grâce aux phéromones nourriture laissées. On constate alors que le chemin n'est pas le plus direct mais qu'il relie tout de même nourriture et fourmilière.
+
+![image](https://user-images.githubusercontent.com/80055517/117063309-ea85d780-ad24-11eb-94d1-c9aeb0611d5a.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117063363-01c4c500-ad25-11eb-8997-72ebce20629c.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117063453-27ea6500-ad25-11eb-8d0a-09b7e8cc86cd.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117063519-3df82580-ad25-11eb-8b18-292e11cd4386.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117063588-549e7c80-ad25-11eb-942b-97606ec01afe.png)
+
+De retour sur le chemin de la nourriture, on observe bien qu'elle remonte le chemin du retour de la nourriture qu'elle a suivi précédemment. On peut également constater qu'après la dispersion des phéromones maison de la première phase de recherche les chemins maison et nourriture coincident. 
+
+C'est donc un premier résultat concluant. En effet, l'objectif d'établir un chemin entre la fourmilière et la nourriture a bien été atteint. On peut alors conclure que notre algorithme pour le choix de décision du chemin à prendre est à peu près valide et correspond bien à ce que l'on observe dans la nature, en tous cas, dans une situation très simplifiée. Cependant, les ratés de cette algorithme sont compensés par le facteur d'exploration qui permet, comme dit précédemment de débloquer certaines situations par l'aout d'une composante aléatoire dans le déplacement.
+
+On peut maintenant voir comment réagit l'algorithme lorsqu'il y a plusieurs fourmis. On a pris ici un modèle à 3 fourmis.
+
+Exemple 2 :
+
+![image](https://user-images.githubusercontent.com/80055517/117064580-a7c4ff00-ad26-11eb-9664-71d849f081bc.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117064676-c3c8a080-ad26-11eb-9eee-e163d8ba6f61.png)
+
+Après quelques recherches (dont on peut suivre la trace sur la 2ème carte), une fourmi trouve nourriture.
+
+![image](https://user-images.githubusercontent.com/80055517/117064841-fecad400-ad26-11eb-81d9-d713ff9c1a86.png)
+
+Elle remonte alors les phéromones laissées à l'allée et dépose des phéromones nourriture. On voit que ces chemins coincident sur les deuxième et troisième cartes.
+
+![image](https://user-images.githubusercontent.com/80055517/117065082-494c5080-ad27-11eb-85ac-da34a0f5a8d2.png)
+
+La fourmi repart alors su la trace laissée et une autre trouve également la trace et va la suivre.
+
+![image](https://user-images.githubusercontent.com/80055517/117065203-7b5db280-ad27-11eb-887d-1bf1c56bfa56.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117065296-9cbe9e80-ad27-11eb-9478-8a2ef7b4fb0b.png)
+
+La première fourmi retrouve rapidement la nourriture, tandis que la deuxième met un peu plus de temps (l'autre a le temps de ramener la sienne)
+
+![image](https://user-images.githubusercontent.com/80055517/117065483-df807680-ad27-11eb-95b6-e052dfb42a50.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117065617-050d8000-ad28-11eb-895e-31834bf41712.png)
+
+Finalement, les deux enchainent les allée-retours.
+
+![image](https://user-images.githubusercontent.com/80055517/117065744-266e6c00-ad28-11eb-8cd9-f1f9ce60b4a1.png)
+
+On voit un chemin net se dessiner sur la troisième carte.
+
+![image](https://user-images.githubusercontent.com/80055517/117065899-5453b080-ad28-11eb-88ab-3d09f13b64bb.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117065945-63d2f980-ad28-11eb-96e9-25cfbfdc2a86.png)
+
+En déposant la 6ème unité de nourriture, elles vont même permettre la création d'un nouvel individu.
+
+
+On peut donc voir que dans une situation un peu plus complexe, l'algorithme fonctionne toujours. Il ne permet pas vraiment d'optimiser le chemin mais on voit qu'à terme, les fourmis suivent toujours le même parcours ce qui peut se comparer avec leur comportement réel.
+
+
+
+
+
+
+
+
 Présentation du choix de modélisation, des outils, du code et des résultats (tableaux, courbes, animations...) (**avec une analyse critique**).
 
 
