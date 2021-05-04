@@ -72,50 +72,59 @@ Ensuite nous avons conçu une fonction de base qui permettait de générer un mo
 
 **def generate_simple_map(n, m, nb_trap): # n : lignes m : colonnes**
 
-    """Préconditions : m > 0 et n > 0, initial_size > 0
+   """Préconditions : m > 0 et n > 0, initial_size > 0
 
-    Renvoie un monde de taille n*m avec une fourmilière au centre et un point de nourriture en périphérie"""
+   Renvoie un monde de taille n*m avec une fourmilière au centre et un point de nourriture en périphérie"""
 
-    map = np.array([[" " for i in range(0, n)] for j in range(0, n)]) # on crée la matrice vide (avec des " " partout)
+    map = np.array([[" " for i in range(0, n)] for j in range(0, n)]) 
+   
+   On crée la matrice vide (avec des " " partout)
 
-    #On crée la fourmilière au centre
+   **On crée la fourmilière au centre
 
     for i in range(0, initial_size):
 
         for k in range(0, initial_size):
 
             map = np.delete(map, m*(n//2 - initial_size//2 + i) + m//2 - initial_size//2 + k) 
-	    **on copie le monde en enlevant une à une les cases du carré de taille initial_size situé au centre**
+On copie le monde en enlevant une à une les cases du carré de taille initial_size situé au centre
 
-            map = np.insert(map, m*(n//2 - initial_size//2 + i) + m//2 - initial_size//2 + k, "h") #on remplace les cases initialement vide (avec un " ") par une case "fourmilière" (avec un "h" pour "home")
+            map = np.insert(map, m*(n//2 - initial_size//2 + i) + m//2 - initial_size//2 + k, "h") 
+On remplace les cases initialement vide (avec un " ") par une case "fourmilière" (avec un "h" pour "home")
 
             map = np.array([[map[m*j + i] for i in range(0, m)] for j in range(0, n) ])
 
-    
+   **On crée un point de nourriture
 
-    # on crée un point de nourriture
-
-    food_line = random.randint(0, 2*n//5 - 1) # on définit ainsi la périphérie comme étant les cases du bord de la matrice avec un largeur de n/5
+    food_line = random.randint(0, 2*n//5 - 1) 
+   On définit ainsi la périphérie comme étant les cases du bord de la matrice avec un largeur de n/5
 
     food_column = random.randint(0, 2*m//5 - 1)
 
-    if food_line > n//5 - 1: # on est sur la périphérie du bas
+    if food_line > n//5 - 1: 
+   On est sur la périphérie du bas
 
         food_line = n - 2 - n//5 + food_line
 
-    if food_column > m//5 - 1: # on est sur la périphérie de droite
+    if food_column > m//5 - 1: 
+   On est sur la périphérie de droite
 
         food_column = m - 2 - m//5 + food_column
 
-    where = random.sample([food_line, food_column], 1) # on définit une périphérie où se mettre (horizontale ou verticale)
+    where = random.sample([food_line, food_column], 1) 
+   On définit une périphérie où se mettre (horizontale ou verticale)
 
-    if where == food_line: # on est sur une périphérie en haut ou en bas
+    if where == food_line: 
+   On est sur une périphérie en haut ou en bas
 
-        food_column = random.randint(0, m - 1) # on définit une case au hasard sur cette périphérie
+        food_column = random.randint(0, m - 1)
+On définit une case au hasard sur cette périphérie
 
-    else : #on est sur une périphérie latérale
+    else : 
+   On est sur une périphérie latérale
 
-        food_line = random.randint(0, n - 1) # on définit une case au hasard sur cette périphérie
+        food_line = random.randint(0, n - 1) 
+On définit une case au hasard sur cette périphérie
 
     map = np.delete(map, m*food_line + food_column)
 
@@ -125,7 +134,7 @@ Ensuite nous avons conçu une fonction de base qui permettait de générer un mo
 
     
 
-    #carte de la nourriture
+   **Carte de la nourriture**
 
     food_quantity = random.randint(5, max_food_quantity)
 
@@ -137,7 +146,7 @@ Ensuite nous avons conçu une fonction de base qui permettait de générer un mo
 
     food_map = np.array([[food_map[m*j + i] for i in range(0, m)] for j in range(0, n)])    
 
-                    #ajout de pièges mortel pour fourmis
+   **Ajout de pièges mortel pour fourmis**
 
     for i in range(0,nb_trap):  
 
@@ -189,7 +198,7 @@ print (generate_simple_map(n, m, nb_trap))
  [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
  [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
  [' ' ' ' ' ' ' ' ' ' 'p' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
- [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 'p' ' ']
+ [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 'p' ' ']	Les 'p' sont deonc des pièges, le 'n' la source de nourriture et les 'h' les cases fourmilières.
  [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
  [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 'h' 'h' ' ' ' ' ' ' 'p' ' ' ' ' ' ' ' ']
  [' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' 'h' 'h' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ' ']
@@ -220,6 +229,11 @@ print (generate_simple_map(n, m, nb_trap))
  [ 0 16  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0]
  [ 0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0  0]]
 
+Nous avons ensuite créé deux fonctions "neighboorhood" comme dans le modèle de Schelling. La première s'appelle **spatial_ants_neighboorhood** et permet de renvoyer le voisinage d'une certaine case dans la matrice des fourmis dont les constituants sont des caractères. La seconde est **spatial_pher_neighboorhood** et effectue la même chose mais pour des matrices dont les composants sont des entiers.
+
+Après quoi, nous avons fait une fonction qui générait les fourmis à leur place de départ, c'est à dire à côté de la fourmilière. Pour cela, nous avons regarder chaque case vide de la carte fourmis dont le voisinage comportait une case fourmilière et y avont alors ajouté une fourmi 'f'. Si toutes les cases en périphérie de la fourmilière sont déjà occupées, le paramètre de voisinage des cases regardées augmente de un ce qui permet de placer toutes les fourmis en couronne autour de la fourmilière.
+
+![image](https://user-images.githubusercontent.com/80055517/117021886-0a52d680-acf8-11eb-91b9-8467806c2a85.png)
 
 Présentation du choix de modélisation, des outils, du code et des résultats (tableaux, courbes, animations...) (**avec une analyse critique**).
 
