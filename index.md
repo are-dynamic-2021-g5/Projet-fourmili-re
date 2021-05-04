@@ -129,6 +129,7 @@ Ensuite nous avons conçu une fonction de base qui permettait de générer un mo
     print (generate_simple_map(n, m, nb_trap))
 
 Les 'p' sont donc des pièges, le 'n' la source de nourriture et les 'h' les cases fourmilières.
+
 ![image](https://user-images.githubusercontent.com/80055517/117023153-23a85280-acf9-11eb-8625-e1f8107026eb.png)
 
 Notre modèle utilise un objet assez simple, la matrice, sur lequel on ne peut bien représenter qu'une seule information. C'est pourquoi nous avons séparé chaque degré de lecture en une carte. Il y en a 5 en tout : celle des fourmis, celle des phéromones maison, celle des phéromones nourriture, celle de la nourriture, celle des horloges.
@@ -590,7 +591,9 @@ Autres détails après avoir effectué un déplacement les fourmis changent de n
 
 La fonction renvoie (dans l'ordre mais pas sur l'exemple par manque de place) : la carte des fourmis, la carte des phéromones maison, la carte des phéromones nourriture et la carte des horloges.
 Un exemple de l'action d'un piège :
+
 ![image](https://user-images.githubusercontent.com/80055517/117034024-3162d580-ad03-11eb-95b4-494f70d6e334.png)
+
 ![image](https://user-images.githubusercontent.com/80055517/117034085-40e21e80-ad03-11eb-8725-97e2bc4baf7c.png)
 
 
@@ -759,11 +762,15 @@ La première examine le voisinage de la fourmi de coordonées [a, b] et vérifie
 La fonction renvoie donc la carte fourmis après la prise de nourriture, celle de la nourriture et celle des horloges.
 
 Avant la prise de nourriture :
+
 ![image](https://user-images.githubusercontent.com/80055517/117034306-7424ad80-ad03-11eb-9ae1-8f4d8e6f2b26.png)
+
 ![image](https://user-images.githubusercontent.com/80055517/117034358-83a3f680-ad03-11eb-99f1-ae3b5ade15f7.png)
 
 Après la prise de nourriture :
+
 ![image](https://user-images.githubusercontent.com/80055517/117034435-97e7f380-ad03-11eb-9221-63806fe989c4.png)
+
 ![image](https://user-images.githubusercontent.com/80055517/117034495-a6cea600-ad03-11eb-9241-7cd692118eac.png)
 
 La fonction **drop_food** retransforme une fourmi avec nourriture ayant bougée ('t') en un fourmi exploratrice ayant bougée ('g') si elle est à côté de la fourmilière. De plus le compte de la nourriture de la fourmilière augmente alors de un.
@@ -784,10 +791,253 @@ La fonction **drop_food** retransforme une fourmi avec nourriture ayant bougée 
    La fonction renvoie la carte fourmis et le compte de nourriture après dépôt.
    
 ![image](https://user-images.githubusercontent.com/80055517/117035097-3a07db80-ad04-11eb-8c6d-e42a18257fc5.png)
+
 ![image](https://user-images.githubusercontent.com/80055517/117035249-61f73f00-ad04-11eb-8536-32004a36f741.png)
+
 ![image](https://user-images.githubusercontent.com/80055517/117035304-72a7b500-ad04-11eb-8ad2-e64c5f73985b.png)
 
+Voilà maintenant la fonction qui effectue un tour complet du modèle, c'est à dire le déplacement selon la fonction **relocation**, la prise de nourriture avec **take_food** et le dépôt avec **drop_food** pour chacune des cases de la carte. Elle ajoute également une fonctionnalité : la création de nouvelles fourmis. En effet, si le compte de nourriture déposé à la fourmilière est supérieur à un seuil (creation_rate), une nouvelle fourmi est créée.
 
+    def one_turn(map, map_pher_home, map_pher_food, food_map, clock_map, count):
+    """Renvoie la map après avoir effectuer sur toutes les cases une relocation"""
+    one_map = map
+    one_pher_home_map = map_pher_home
+    one_pher_food_map = map_pher_food
+    one_food_map = food_map
+    one_clock = clock_map
+    one_count = count
+    for i in range(0, n):
+        for j in range(0, m):
+            if one_map[i, j] != " ":
+                a = spatial_relocation(one_map, one_pher_home_map, one_pher_food_map, one_clock, i, j)
+                one_map = a[0]
+                one_pher_home_map = a[1]
+                one_pher_food_map = a[2]
+                one_clock = a[3]
+    for i in range(0, n):
+        for j in range(0, m):
+            if one_map[i, j] == "g" or one_map[i, j] == "t":
+                b = take_food(one_map, one_food_map, one_clock, i, j) #si une fourmi est à côté de nourriture on fait la procédure
+                one_map = b[0]
+                c = drop_food(one_map, one_count, i, j)
+                one_map = c[0] #si une fourmi avec nourriture arrive au nid elle dépose la nourriture
+                one_food_map = b[1]
+                one_clock = b[2]
+                one_count = c[1]
+
+    for i in range(0, n):
+        for j in range(0, m):
+            if one_map[i, j] == "g":
+                one_map = np.delete(one_map, m*i + j)
+                one_map = np.insert(one_map, m*i + j, "f")
+                one_map = np.array([[one_map[m*k + l] for l in range(0, m)] for k in range(0, n)])
+            elif one_map[i, j] == "t":
+                one_map = np.delete(one_map, m*i + j)
+                one_map = np.insert(one_map, m*i + j, "s")
+                one_map = np.array([[one_map[m*k + l] for l in range(0, m)] for k in range(0, n)])
+                
+    #création d'une fourmi si le compte de nourriture atteint creation_rate
+    if one_count >= creation_rate:
+        for i in range(1, n - 1):
+            for j in range(1, m - 1):
+                for k in range(0, 3):
+                    for l in range(0, 3):
+                        if spatial_ants_neighborhood(one_map, i, j, neigh)[k, l] == "h" and one_map[i, j] == " " and one_count >= creation_rate:
+                            one_map = np.delete(one_map, m*i + j)
+                            one_map = np.insert(one_map, m*i + j, "f")
+                            one_map = np.array([[one_map[m*k + l] for l in range(0, m)] for k in range(0, n)])
+                            one_clock = np.delete(one_clock, m*i + j)
+                            one_clock = np.insert(one_clock, m*i + j, life_time)
+                            one_clock = np.array([[one_clock[m*k + l] for l in range(0, m)] for k in range(0, n)])                            
+                            one_count = one_count - creation_rate
+    one = [one_map, one_pher_home_map, one_pher_food_map, one_food_map, one_clock, one_count]
+
+    return one
+
+![image](https://user-images.githubusercontent.com/80055517/117036973-455c0680-ad06-11eb-9004-02d3b9889ac9.png)
+
+
+Le dernier élément à ajouter à l'édifice est le facteur d'exploration. Celui-ci entraine un déplacement aléatoire périodique tous les "exploration_rate" tours. Son codage est similaire à la partie aléatoire du déplacement avec **relocation**.
+
+Un mouvement ératique :
+
+    def one_eratic_move(map, map_pher_home, map_pher_food, clock_map, a, b):
+    """Retourne les différentes maps après un déplacement aléatoire de la fourmis, y compris si elle suit un chemin de phéromones"""
+    ant = map[a, b] #on enregistre la cellule à déplacer (une fourmi)
+    pher_food_map = map_pher_food
+    pher_home_map = map_pher_home
+    relocation = map
+    clock = clock_map
+    move_line = a
+    move_column = b
+    if ant == "f": #déplacement des fourmis en recherche de nourriture
+        pher_home_map = np.delete(pher_home_map, m*move_line + move_column)
+        pher_home_map = np.insert(pher_home_map, m*move_line + move_column, pers_pher) # sur la map de phéromones "maison" la case de même coordonnées que la fourmi prend la valeur de la persistance des phéromones
+        pher_home_map = np.array([[pher_home_map[m*j + i] for i in range(0, m)] for j in range(0, n)])
+        next_move = random.randint(0, 3) #on décide le prochain mouvement au hasard
+        if next_move == 0:
+             if move_line > 0 and relocation[move_line - 1, move_column] == " " and pher_home_map[move_line - 1, move_column] < pers_pher - memory: #la prochaine case existe et est vide
+                move_line = move_line - 1
+                move_column = move_column
+                    
+        elif next_move == 1:
+            if move_column < m - 1 and relocation[move_line, move_column + 1] == " " and pher_home_map[move_line, move_column + 1] < pers_pher - memory:
+                move_line = move_line
+                move_column = move_column + 1
+                    
+        elif next_move == 2:
+            if move_line < n - 1 and relocation[move_line + 1, move_column] == " " and pher_home_map[move_line + 1, move_column] < pers_pher - memory:
+                move_line = move_line + 1
+                move_column = move_column
+                    
+        elif next_move == 3:
+            if move_column > 0 and relocation[move_line, move_column - 1] == " " and pher_home_map[move_line, move_column - 1] < pers_pher - memory:
+                move_line = move_line
+                move_column = move_column - 1
+                    
+            #on déplace et modifie l'horloge de la fourmi
+        clock1 = np.array(clock)
+        clock = np.delete(clock1, m*move_line + move_column)
+        clock = np.insert(clock, m*move_line + move_column, int(clock1[a, b] - 1))
+        clock = np.array([[clock[m*j + i] for i in range(0, m)] for j in range(0, n)])  
+        if a != move_line or b != move_column:
+            clock = np.delete(clock, m*a + b)
+            clock = np.insert(clock, m*a + b, 0)
+            clock = np.array([[clock[m*j + i] for i in range(0, m)] for j in range(0, n)])     
+                
+            # on supprime l'indidu du monde
+        relocation = np.delete(relocation, m*a + b) #on copie le monde sans l'individu
+        relocation = np.insert(relocation, m*a + b, " ") #on remplace la place de l'individu par une case vide (avec un " ")
+        relocation = np.array([[relocation[m*j + i] for i in range(0, m)] for j in range(0, n) ]) #on remet le monde sous forme de tableau
+                # on remplace la case vide par l'individu
+        relocation = np.delete(relocation, m*(move_line) + move_column) #on copie le monde sans la case vide
+        relocation = np.insert(relocation, m*(move_line) + move_column, "g") #on remplace la place de la case vide par l'individu (ant)
+        relocation = np.array([[relocation[m*j + i] for i in range(0, m)] for j in range(0, n) ]) #on remet le monde sous forme de tableau
+    if ant == "s": #déplacement des fourmis ayant trouvé de la nourriture
+        pher_food_map = np.delete(pher_food_map, m*move_line + move_column)
+        pher_food_map = np.insert(pher_food_map, m*move_line + move_column, pers_pher) # sur la map de phéromones "nourriture" la case de même coordonnées que la fourmi prend la valeur de la persistance des phéromones
+        pher_food_map = np.array([[pher_food_map[m*j + i] for i in range(0, m)] for j in range(0, n)])
+        next_move = random.randint(0, 3) #on décide le prochain mouvement au hasard
+        if next_move == 0:
+            if move_line > 0 and relocation[move_line - 1, move_column] == " " and pher_food_map[move_line, move_column - 1] < pers_pher - 2: #la prochaine case existe et est vide
+                move_line = move_line - 1
+                move_column = move_column
+                    
+        elif next_move == 1:
+            if move_column < m - 1 and relocation[move_line, move_column + 1] == " " and pher_food_map[move_line, move_column - 1] < pers_pher - 2:
+                move_line = move_line
+                move_column = move_column + 1
+                   
+        elif next_move == 2:
+            if move_line < n - 1 and relocation[move_line + 1, move_column] == " " and pher_food_map[move_line, move_column - 1] < pers_pher - 2:
+                move_line = move_line + 1
+                move_column = move_column
+                    
+        elif next_move == 3:
+            if move_column > 0 and relocation[move_line, move_column - 1] == " " and pher_food_map[move_line, move_column - 1] < pers_pher - 2:
+                move_line = move_line
+                move_column = move_column - 1
+                                        
+            #on déplace et modifie l'horloge de la fourmi
+        clock1 = np.array(clock)
+        clock = np.delete(clock1, m*move_line + move_column)
+        clock = np.insert(clock, m*move_line + move_column, int(clock1[a, b] - 1))
+        clock = np.array([[clock[m*j + i] for i in range(0, m)] for j in range(0, n)])  
+        if a != move_line or b != move_column:
+            clock = np.delete(clock, m*a + b)
+            clock = np.insert(clock, m*a + b, 0)
+            clock = np.array([[clock[m*j + i] for i in range(0, m)] for j in range(0, n)])     
+                
+            # on supprime l'indidu du monde
+        relocation = np.delete(relocation, m*a + b) #on copie le monde sans l'individu
+        relocation = np.insert(relocation, m*a + b, " ") #on remplace la place de l'individu par une case vide (avec un " ")
+        relocation = np.array([[relocation[m*j + i] for i in range(0, m)] for j in range(0, n) ]) #on remet le monde sous forme de tableau
+                # on remplace la case vide par l'individu
+        relocation = np.delete(relocation, m*(move_line) + move_column) #on copie le monde sans la case vide
+        relocation = np.insert(relocation, m*(move_line) + move_column, "t") #on remplace la place de la case vide par l'individu (ant)
+        relocation = np.array([[relocation[m*j + i] for i in range(0, m)] for j in range(0, n) ]) #on remet le monde sous forme de tableau
+ 
+    return [relocation, pher_home_map, pher_food_map, clock]
+    
+ Un tour de mouvement ératique pour toutes les fourmis :
+
+    def one_turn_eratic(map, map_pher_home, map_pher_food, clock_map):
+    """Retourne les maps après un déplacement aléatoire de toute les fourmis"""
+    one_map1 = map
+    one_pher_home_map1 = map_pher_home
+    one_pher_food_map1 = map_pher_food
+    one_clock1 = clock_map
+    one_map2 = map
+    one_pher_home_map2 = map_pher_home
+    one_pher_food_map2 = map_pher_food
+    one_clock2 = clock_map
+    one = [one_pher_home_map1, one_pher_food_map1, one_clock1, one_map1]
+    for i in range(0, n):
+        for j in range(0, m):
+            if one_map1[i, j] != " ":
+                a = one_eratic_move(one_map1, one_pher_home_map1, one_pher_food_map1, one_clock1, i, j)
+                one_map2 = a[0]
+                one_pher_home_map2 = a[1]
+                one_pher_food_map2 = a[2]
+                one_clock2 = a[3]
+                one = a
+                one_map1 = one_map2
+                one_pher_home_map1 = one_pher_home_map2
+                one_pher_food_map1 = one_pher_food_map2
+                one_clock1 = one_clock2
+
+    for i in range(0, n):
+        for j in range(0, m):
+            if one_map1[i, j] == "g":
+                one_map1 = np.delete(one_map1, m*i + j)
+                one_map1 = np.insert(one_map1, m*i + j, "f")
+                one_map1 = np.array([[one_map1[m*k + l] for l in range(0, m)] for k in range(0, n)])
+            elif one_map1[i, j] == "t":
+                one_map1 = np.delete(one_map1, m*i + j)
+                one_map1 = np.insert(one_map1, m*i + j, "s")
+                one_map1 = np.array([[one_map1[m*k + l] for l in range(0, m)] for k in range(0, n)])
+    return one
+
+Le facteur d'exploration permet théoriquement aux fourmis d'innover en sortant un peu des chemins tracés pour éventuellement en trouver un plus efficace qui sera à terme privilégié par une plus forte présence de phéromones.
+
+Il ne reste plus qu'à assembler le tout dans la fonction **simulation**
+
+    def simulation(map, map_pher_home, map_pher_food, food_map, clock_map, food_count, max_turn):
+    """Effectue la simulation complète"""
+    sim_map = map
+    sim_pher_home = map_pher_home
+    sim_pher_food = map_pher_food
+    sim_food = food_map
+    sim_clock = clock_map
+    sim_count = food_count
+    sim = [sim_map, sim_pher_home, sim_pher_food, sim_food, sim_clock, sim_count]
+    for t in range(0, max_turn):
+        a = one_turn(sim_map, sim_pher_home, sim_pher_food, sim_food, sim_clock, sim_count)
+        sim_map = a[0]
+        sim_pher_home = a[1]
+        sim_pher_food = a[2]
+        sim_food = a[3]
+        sim_clock = a[4]
+        sim_count = a[5]
+        for i in range(0, n):
+            for j in range(0, m):
+                if sim_pher_home[i, j] > 0 :
+                    sim_pher_home[i, j] = sim_pher_home[i, j] - 1
+                if int(sim_pher_food[i, j]) > 0 :
+                    sim_pher_food[i, j] = sim_pher_food[i, j] - 1
+        print("tour :")
+        print(t)
+        print("sim_map :")
+        print(sim_map)
+
+        if t % exploration_rate == 0:
+            b = one_turn_eratic(sim_map, sim_pher_home, sim_pher_food, sim_clock)
+            sim_map = b[0]
+            sim_pher_home = b[1]
+            sim_pher_food = b[2]
+            sim_clock = b[3]
+        sim = [sim_map, sim_pher_home, sim_pher_food, sim_food, sim_clock, sim_count]
+    return sim
 
 
 Présentation du choix de modélisation, des outils, du code et des résultats (tableaux, courbes, animations...) (**avec une analyse critique**).
