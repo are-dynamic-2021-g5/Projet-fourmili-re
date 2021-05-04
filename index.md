@@ -67,25 +67,10 @@ Tout d'abord nous avons listé l'ensemble des paramètres que nous allions utili
 ![image](https://user-images.githubusercontent.com/80055517/117018918-4173b880-acf5-11eb-980d-8320636e688d.png)
 
 
-**Paramètres**
-n = m = 18 # nombre de lignes = nombre de colonnes de la matrice
-initial_size = 2 # taille de la fourmilière initiale
-max_food_quantity = 20 #quantité maximale de nourriture par source de nourriture
-neigh = 1 #voisinage / champ de vision de chaque fourmi
-pers_pher = 100 #persistance des phéromones dans l'environnement
-life_time = 200 #durée de vie initiale des fourmis
-reward = 10 #bonus de durée de vie pour avoir trouvé de la nourriture
-nb_ants = 8 #nombre de fourmis initiales
-food_count = 0 #quantité initiale de nourriture apportée au nid
-creation_rate = 6 # valeur de food_count pour laquelle une nouvelle fourmi est créée
-exploration_rate = 10 #facteur d'exploration
-max_turn = 200 #nombre de tours effectués
-nb_trap = 10 #nombre de pièges
-memory = 8 #mémoire des fourmis
 
 Ensuite nous avons conçu une fonction de base qui permettait de générer un monde avec de la nourriture et des pièges, support de toutes les autres fonctions. Elle crée l'univers en quelque sorte.
 
-def generate_simple_map(n, m, nb_trap): # n : lignes m : colonnes
+**def generate_simple_map(n, m, nb_trap): # n : lignes m : colonnes**
 
     """Préconditions : m > 0 et n > 0, initial_size > 0
 
@@ -93,13 +78,14 @@ def generate_simple_map(n, m, nb_trap): # n : lignes m : colonnes
 
     map = np.array([[" " for i in range(0, n)] for j in range(0, n)]) # on crée la matrice vide (avec des " " partout)
 
-    # on crée la fourmilière au centre
+    #On crée la fourmilière au centre
 
     for i in range(0, initial_size):
 
         for k in range(0, initial_size):
 
-            map = np.delete(map, m*(n//2 - initial_size//2 + i) + m//2 - initial_size//2 + k) #on copie le monde en enlevant une à une les cases du carré de taille initial_size situé au centre
+            map = np.delete(map, m*(n//2 - initial_size//2 + i) + m//2 - initial_size//2 + k) 
+	    **on copie le monde en enlevant une à une les cases du carré de taille initial_size situé au centre**
 
             map = np.insert(map, m*(n//2 - initial_size//2 + i) + m//2 - initial_size//2 + k, "h") #on remplace les cases initialement vide (avec un " ") par une case "fourmilière" (avec un "h" pour "home")
 
@@ -151,15 +137,7 @@ def generate_simple_map(n, m, nb_trap): # n : lignes m : colonnes
 
     food_map = np.array([[food_map[m*j + i] for i in range(0, m)] for j in range(0, n)])    
 
-    
-
-    
-
-    
-
                     #ajout de pièges mortel pour fourmis
-
-    
 
     for i in range(0,nb_trap):  
 
