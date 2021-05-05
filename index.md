@@ -58,14 +58,15 @@ Pour s’assurer de la pertinence de la modélisation, nous comparerons le résu
 
 ## Présentation structurée des résultats
 
-### présentation modèle et outils
+### Présentation modèle et outils
 
-Nous avons pris les modules random et numpy pour modéliser notre projet. Nous avons décidé d'utiliser les matrices pour obtenir une vue de dessus, ce qui offre une meilleure compréhension de la fourmilière. De plus, ayant déjà travaillé avec numpy et les matrices, il nous était plus simple d’utiliser ces dernières, car mieux maîtrisée. 
+Nous avons pris les modules random et numpy pour modéliser notre projet. Nous avons décidé d'utiliser les matrices pour obtenir une vue de dessus, ce qui offre une meilleure compréhension de la fourmilière. De plus, ayant déjà travaillés avec numpy et les matrices, il nous était plus simple d’utiliser ces dernières, car mieux maîtrisées. 
 
 
 Pour modéliser de façon réaliste notre fourmilière, nous avons recherché les notions importantes à connaître concernant les fourmis.
- Les premières exploratrices cherchent de manière aléatoire un point de nourriture, une fois trouvé par une des fourmis, elle dépose des phéromones, une substance chimique, en rentrant au nid pour déposer la nourriture. Ce principe de phéromones est très important pour permettre aux fourmis de récupérer de la nourriture pour le nid.  
-Il y a autres mécanismes un peu moins importants, qui touche malgré tout la recherche de nourriture,  comme une durée de vie limitée pour les fourmis, et les prédateurs (modélisé dans notre cas, comme des pièges). 
+ Les premières exploratrices cherchent de manière aléatoire un point de nourriture, une fois trouvé par une des fourmis, elle dépose des phéromones, une substance chimique, en rentrant au nid pour déposer la nourriture. Ce principe de phéromones est très important pour permettre aux fourmis de récupérer de la nourriture pour le nid, elles permettent aux fourmis de stocker de l'information dans l'environnement. 
+ A cela s'ajoute le facteur d'exploration qui permet aux fourmis d'innover. En effet, celui-ci autorise des écarts au suivi sinon scrupuleux des phéromones. A terme il permet de trouver des chemins plus efficace et ainsi d'optimiser l'apport en nourriture de la fourmilière.
+Il y a d'autres mécanismes un peu moins importants, qui touche malgré tout la recherche de nourriture, comme une durée de vie limitée pour les fourmis, et les prédateurs (modélisé dans notre cas, comme des pièges). 
 Ces explorations aléatoires et ces phéromones joue un grand rôle dans notre code, avec utilisation du module random, de fonctions sur les phéromones avec des formules mathématiques représentant les phéromones. 
 
 ### Explication du code
