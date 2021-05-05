@@ -1122,7 +1122,7 @@ La première fourmi retrouve rapidement la nourriture, tandis que la deuxième m
 
 ![image](https://user-images.githubusercontent.com/80055517/117065617-050d8000-ad28-11eb-895e-31834bf41712.png)
 
-Finalement, les deux enchainent les allée-retours.
+Finalement, les deux enchainent les aller-retours.
 
 ![image](https://user-images.githubusercontent.com/80055517/117065744-266e6c00-ad28-11eb-8cd9-f1f9ce60b4a1.png)
 
