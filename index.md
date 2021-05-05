@@ -65,7 +65,7 @@ Nous avons pris les modules random et numpy pour modéliser notre projet. Nous a
 Pour modéliser de façon réalise notre fourmilière, nous avons recherché les notions importantes à connaître pour les fourmis.
  Les premières exploratrices cherchent de manière aléatoire un point de nourriture, une fois trouvé par une des fourmis, elle dépose des phéromones, une substance chimique, en rentrant au nid pour déposer la nourriture. Ce principe de phéromones est très important pour permettre aux fourmis de récupérer de la nourriture pour le nid.  
 Il y a autres mécanismes un peu moins importants, qui touche malgré tout la recherche de nourriture,  comme une durée de vie limitée pour les fourmis, et les prédateurs (modélisé dans notre cas, comme des pièges). 
-Ces explorations aléatoires et ces phéromones joue un grand rôle dans notre code, avec utilisation du module random, de fonctions sur les phéromones avec des formules mathématiquesreprésentant les phéromones. 
+Ces explorations aléatoires et ces phéromones joue un grand rôle dans notre code, avec utilisation du module random, de fonctions sur les phéromones avec des formules mathématiques représentant les phéromones. 
 
 
 ### Explication du code
