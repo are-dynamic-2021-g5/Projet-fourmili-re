@@ -58,14 +58,6 @@ Pour s’assurer de la pertinence de la modélisation, nous comparerons le résu
 
 ## Présentation structurée des résultats
 
-### Présentation du modèle et des outils
-
-Nous avons pris les modules random et numpy pour modéliser notre projet. Nous avons décidé d'utiliser les matrices pour obtenir une vue de dessus, ce qui offre une meilleure compréhension de la fourmilière. De plus, ayant déjà travaillé avec numpy et les matrices, il nous était plus simple d’utiliser ces dernières, car mieux maîtrisée. 
-
-Pour modéliser de façon réalise notre fourmilière, nous avons recherché les notions importantes à connaître pour les fourmis.
- Les premières exploratrices cherchent de manière aléatoire un point de nourriture, une fois trouvé par une des fourmis, elle dépose des phéromones, une substance chimique, en rentrant au nid pour déposer la nourriture. Ce principe de phéromones est très important pour permettre aux fourmis de récupérer de la nourriture pour le nid.  
-Il y a autres mécanismes un peu moins importants, qui touche malgré tout la recherche de nourriture,  comme une durée de vie limitée pour les fourmis, et les prédateurs (modélisé dans notre cas, comme des pièges). 
-Ces explorations aléatoires et ces phéromones joue un grand rôle dans notre code, avec utilisation du module random, de fonctions sur les phéromones avec des formules mathématiques représentant les phéromones. 
 
 
 ### Explication du code
@@ -1051,7 +1043,7 @@ Il ne reste plus qu'à assembler le tout dans la fonction **simulation**
 
 Notre premier objectif était de modéliser le déplacement des fourmis et l'organisation de leur chemin non pas grâce à une mémoire mais grâce aux phéromones laissées derrière elles. Après de multiples tentatives et modifications  du code (en particulier **choose_the_way**), nous avons réussi a obtenir ce comportement d'abord pour une fourmi puis pour plusieurs.
 
-Exemple 1 :
+Expérience 1 : **Etablissement d'un chemin par une fourmi**
 
 ![image](https://user-images.githubusercontent.com/80055517/117061111-18b5e800-ad22-11eb-8252-5547f3ae145a.png)
 
@@ -1096,7 +1088,7 @@ C'est donc un premier résultat concluant. En effet, l'objectif d'établir un ch
 
 On peut maintenant voir comment réagit l'algorithme lorsqu'il y a plusieurs fourmis. On a pris ici un modèle à 3 fourmis.
 
-Exemple 2 :
+Expérience 2 : **Etablissement d'un chemin avec 3 fourmis et création d'une fourmi**
 
 ![image](https://user-images.githubusercontent.com/80055517/117064580-a7c4ff00-ad26-11eb-9664-71d849f081bc.png)
 
@@ -1136,6 +1128,217 @@ En déposant la 6ème unité de nourriture, elles vont même permettre la créat
 
 
 On peut donc voir que dans une situation un peu plus complexe, l'algorithme fonctionne toujours. Il ne permet pas vraiment d'optimiser le chemin mais on voit qu'à terme, les fourmis suivent toujours le même parcours ce qui peut se comparer avec leur comportement réel.
+
+
+On va maintenant étudier l'impact d'un fort ou faible taux d'exploration.
+
+Expérience 3 : **Influence d'un fort taux d'exploration**
+
+On a le paramétrage suivant :
+
+![image](https://user-images.githubusercontent.com/80055517/117109961-bbec1900-ad85-11eb-9bca-5181318ebafa.png)
+
+Exploration_rate = 2 signifie que tous les deux tours les fourmis font un mouvement aléatoire, un mouvement sur trois est donc aléatoire. On a donc un fort taux d'exploration (=1/2).
+Notre hypothèse est qu'avec un taux d'exploration si élevé les fourmis n'arrivent pas à établir réellement de chemin. Le mouvement ératque les donne une dimension trop aléatoire au mouvement pour pouvoir suivre un chemin.
+
+![image](https://user-images.githubusercontent.com/80055517/117110532-8ac01880-ad86-11eb-8523-684dac998756.png)
+
+Voilà la situation initiale.
+
+![image](https://user-images.githubusercontent.com/80055517/117110658-c22ec500-ad86-11eb-8c46-ec799e2929b8.png)
+
+Le processus de recherche étant de toute façon aléatoire, le taux d'exploration n'a pas d'influence sur cette partie. Après 15 tours une fourmi trouve la nourriture. On peut observer sur la deuxième carte le chemin qu'elle a suivi et donc qu'elle est censée remonter. En comptant le nombre de cases sur ce chemin, on peut estimer à 10-12 tours le temps nécessaire pour retourner à la fourmilière.
+
+![image](https://user-images.githubusercontent.com/80055517/117111217-8fd19780-ad87-11eb-9c2b-6dcb5fc675da.png)
+
+Pendant que la première fourmi ayant trouvé de la nourriture remonte son chemin ('s' de droite), une deuxième trouve également la source. Celle-ci devrait suivre son propre chemin qui part sur la gauche et remonte vers la fourmilière.
+
+![image](https://user-images.githubusercontent.com/80055517/117111508-01114a80-ad88-11eb-9162-0caf31530446.png)
+
+On observe bien que ces fourmis suivent le chemin qu'elles ont tracé initialement. On va la superposition des chemins entre la carte des phéromones maison et celle des phéromones nourriture.
+
+![image](https://user-images.githubusercontent.com/80055517/117111715-4fbee480-ad88-11eb-9e52-67031f5df674.png)
+
+Quelques tours plus tard, on remarque que les fourmis ont à peine avancer. Cela est dû au mouvement aléatoire qui peut les faire sortir périodiquement du chemin. Elles perdent alors au moins deux tours de déplacement, un pour sortir du chemin puis un pour y revenir.
+
+![image](https://user-images.githubusercontent.com/80055517/117112073-ceb41d00-ad88-11eb-946b-596eecf77b39.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117111958-a4625f80-ad88-11eb-9ded-5d77e6e95e5a.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117112017-b80dc600-ad88-11eb-8497-779415f7026b.png)
+
+On peut par exemple le voir si dessus.
+
+![image](https://user-images.githubusercontent.com/80055517/117112134-e8556480-ad88-11eb-9346-417a3ca2099d.png)
+
+Les fourmis arrivent finalement à la fourmilière avec presque 5 tours de plus que prévu. On peut voir sur le chemin suivi qu'elles ont fait des allée-retours à plusieurs endroits.
+
+![image](https://user-images.githubusercontent.com/80055517/117113845-5733bd00-ad8b-11eb-9e95-ff7a27c652d6.png)
+
+Pour suivre à nouveau le chemin de la nourriture, on remarque que la fourmi au chemin de droite a rapidement retrouvé son chemin contrairement à celle de gauche qui se perd un peu dans les phéromones qu'elle a laissées. La première réussi d'ailleur même a trouvé un chemin plus court grâce à un mouvement aléatoire (qui l'a fait arrivé au dessus de la source de nourriture plutôt qu'à côté).
+
+![image](https://user-images.githubusercontent.com/80055517/117114262-e640d500-ad8b-11eb-824b-c55989554b44.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117114303-f3f65a80-ad8b-11eb-9c90-6e4d87073388.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117114341-007ab300-ad8c-11eb-9b08-3a78c0b12ff7.png)
+ 
+ On voit cependant bien que le retour est compliqué par certains mouvements aléatoires comme le montre ces captures précédentes.
+ 
+ ![image](https://user-images.githubusercontent.com/80055517/117114569-4df72000-ad8c-11eb-8cf5-64120dda1747.png)
+
+Six tours plus tard on voit qu'elle est revenue au même endroit. De plus, l'autre fourmi ayant déjà rapportée de la nourriture n'arrive toujours pas à la retrouver, celle qui trouve la nourriture au tour 52 en est encore une autre.
+
+![image](https://user-images.githubusercontent.com/80055517/117114891-acbc9980-ad8c-11eb-8dbb-1324bf10fc2f.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117115191-1472e480-ad8d-11eb-9dbb-fa947a97d022.png)
+
+
+Ce n'est finalement que 5 tours plus tard (au tour 56) que la fourmi ramène pour la deuxième fois de la nourriture. Les autres n'étant pas près de retrouver la nourriture (pour le 'f' du bas) ou la fourmilière (pour le 's').
+
+Ceci montre alors qu'un facteur d'exploration élevé n'empêche pas les fourmis de trouver leur chemin comme nous le pensions. Cependant, une trop grande propension à l'exploration nuit à l'efficacité du retour et ne permet pas non plus une optimisation du chemin. On peut même conjecturer que le chemin deviendra de plus en plus difficile à suivre à cause des excroissances de celui-ci. En suivant à nouveau le chemin ces excorissances vont être renforcées par le passage systèmatique sur celles-ci, et multipliées par les mouvements aléatoires fréquents. Nous avions donc sous-extimé la force des phéromones en faisant cette hypothèse, néanmoins on voit tout de même que le chemin est plus difficile à suivre lorsque le facteur d'exploration est grand.
+
+Expérience 4 : **Influence d'un faible taux d'exploration**
+
+On a le paramétrage suivant :
+
+![image](https://user-images.githubusercontent.com/80055517/117115747-d3c79b00-ad8d-11eb-8a39-1f4be347a02b.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117115960-0f626500-ad8e-11eb-8147-08165139d355.png)
+
+Aprés 18 tours d'exploration (et la mort d'une fourmi sur un piège) une des fourmis trouve la nourriture. Elle devrait donc remonter son chemin sans exploration parasite. Le taux d'exploartion étant à 1/100 ce n'est que tous les 100 tours qu'il y a un mouvement aléatoire, autant dire jamais sur une courte période.
+
+![image](https://user-images.githubusercontent.com/80055517/117116351-8ac41680-ad8e-11eb-981c-d2d5283b9913.png)
+
+Elle commence donc à remonter son chemin.
+
+![image](https://user-images.githubusercontent.com/80055517/117116439-a9c2a880-ad8e-11eb-8ea5-5da257a908cb.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117116493-bb0bb500-ad8e-11eb-9e82-83a93a05a093.png)
+
+On voit cependant vite qu'elle trouve un blocage, elle fait des allée-retours entre deux cases en haut. Cette fois il n'y a pas de mouvement aléatoire pour la débloquée.
+
+![image](https://user-images.githubusercontent.com/80055517/117116710-f9a16f80-ad8e-11eb-8464-c3fe00bba66e.png)
+
+La deuxième ayant trouvé de la nourriture trouve quant à elle rapidement le chemin de la fourlilière.
+
+![image](https://user-images.githubusercontent.com/80055517/117116858-281f4a80-ad8f-11eb-8d15-4e1d3edf118d.png)
+
+Elle retourne alors vite à la nourriture alors que l'autre est toujours bloquée.
+
+![image](https://user-images.githubusercontent.com/80055517/117116985-4be29080-ad8f-11eb-8315-0f36f2914a33.png)
+
+Le facteur d'exploration étant quasiment nul, ce processus se reproduit sans cesse, sans innovation de nouveau chemin ou déblocage possible. Nous en concluons qu'un facteur d'exploration trop faible ne permet en effet pas l'optimisation du chemin (puisque celui suivi est toujours le même) comme nous l'avions supposé au départ. Cependant, nous avons mis en lumière l'importance crucial de celui-ci. Comme déjà évoqué, il permet de débloquer les situations en doonant une marge de manoeuvre aux foumis. Compte tenu des résultats obtenus aux deux extrêmes, nous ne pouvons affirmer qu'il joue ici le rôle escompté, à savoir l'optimisation du chemin par de petites déviations pouvant être plus efficaces que le chemin initial. Il a plutôt le rôle d'un "facteur naturel" ou d'une "correction d'erreur" et permet, lorsqu'il est bien paramétrer (autour de 1/10), de donner un comportement plus naturel aux fourmis en débloquant certaines situation ou en s'écartant un peu du chemin.
+
+
+Expérience 5 : **Influence d'une persistance trop faible des phéromones**
+
+On a le paramétrage suivant :
+
+![image](https://user-images.githubusercontent.com/80055517/117118547-2eaec180-ad91-11eb-8a03-556c89a1e13b.png)
+
+Les phéromones ne restent ainsi que pendant 10 tours.
+
+![image](https://user-images.githubusercontent.com/80055517/117118820-89481d80-ad91-11eb-9873-3daed2595912.png)
+
+Aprés 20 tours, une fourmi trouve la nourriture. On peut voir que les phéromones maison laissées ont déjà une valeur très faible et donc si la fourmi va réussir à trouver son chemin au retour.
+
+![image](https://user-images.githubusercontent.com/80055517/117119086-ddeb9880-ad91-11eb-99a5-814574147ef1.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117119128-ec39b480-ad91-11eb-9ed9-c0bbe7cdb59e.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117119179-fb206700-ad91-11eb-913b-77719b237fc5.png)
+
+Elle suit bien son chemin jusqu'à un certain point où elle se retrouve bloquée par la disposition et la valeur des phéromones. Les seuls moyens pour la débloquer sont le mouvement aléatoire et la disparition complète des phéromones (qui entraine cependant une perte du chemin). Le mouvement aléatoire ayant la même fréquence que la fréquence de disparition des phéromones on voit qu'on ne peut pas trop compter sur lui non plus pour faire garder le chemin.
+
+![image](https://user-images.githubusercontent.com/80055517/117119514-797d0900-ad92-11eb-9d87-6104cf4d9377.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117119645-a7624d80-ad92-11eb-9e81-cd43c7678efe.png)
+
+Après disparition des phéromones, la fourmi retrouve un chemin. Elle finit par trouver la fourmilière et déposer sa nourriture.
+
+![image](https://user-images.githubusercontent.com/80055517/117119832-de386380-ad92-11eb-9e91-b6384e3350d1.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117119929-fdcf8c00-ad92-11eb-820d-b8af278dda6d.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117119977-0c1da800-ad93-11eb-9058-b212c68a1942.png)
+
+
+La fourmi retrouve le chemin de la nourriture et se bloque à nouveau.
+
+![image](https://user-images.githubusercontent.com/80055517/117120068-28b9e000-ad93-11eb-8aee-d532802670e0.png)
+
+Une fois débloquée, on voit qu'il n'y a plus de chemin vers la maison à côté d'elle. Elle va donc errer aléatoirement pour essayer de la retrouver.
+
+![image](https://user-images.githubusercontent.com/80055517/117120335-7cc4c480-ad93-11eb-8fb1-d25275f8cbcf.png)
+
+On voit là que la persistance des phéromones dans l'environnement est une des clés du succès de l'algorithme. Une persistance trop faible ne permet aucun raté ou blocage puisque chaque tour devient crucial pour pouvoir encore lire les phéromones. On peut comparer cette situation avec une situation de pluie dans la nature. En effet, sous la pluie les phéromones se diluent dans le sol et les traces se perdent. Cela pourrait être une des raisons pour laquelle on ne voit d'ailleurs pas de fourmi par temps de pluie.
+
+
+
+Expérience 5 : **Influence de l'éloignement de la nourriture et du nomvre de pièges**
+
+On a le paramétrage suivant :
+
+![image](https://user-images.githubusercontent.com/80055517/117122778-869bf700-ad96-11eb-8ad7-399385a66215.png)
+
+La taille de la carte a été augmentée ce qui éloigne la nourriture de la fourmilière. Le nombre de fourmis est passé à 8 et le nombre de pièges à 10.
+La carte étant beaucoup plus grande et le nombre de pièges plus élevé, on peut s'attendre à de nombreuses morts de fourmi et à une exploration beaucoup plus longue que précédemment.
+
+![image](https://user-images.githubusercontent.com/80055517/117123194-04600280-ad97-11eb-8094-7f61d9423050.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117123237-12158800-ad97-11eb-9fd4-3faec5d370b8.png)
+
+Après 62 tours déjà trois fourmis sont mortes et la nourriture n'a toujours pas été trouvée.
+
+![image](https://user-images.githubusercontent.com/80055517/117123395-40936300-ad97-11eb-9317-ffc756e43f4f.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117123446-5012ac00-ad97-11eb-83ab-f3245b071436.png)
+
+8 tours plus tard une des fourmis a enfin trouvé la nourriture. On peut cependant voir que la trace de phéromones maison pour rentrer est très complexe et se mêle aux phéromones laissées par d'autres fourmis.
+
+![image](https://user-images.githubusercontent.com/80055517/117123703-a97adb00-ad97-11eb-894d-ab07e4f3eb9c.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117123739-b3044300-ad97-11eb-94b7-e9ecdf81e70c.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117123776-bef00500-ad97-11eb-9ba5-9671fd69bdab.png)
+
+On constate qu'elle commence par bien suivre le chemin laissé. Cependant, elle va rester bloquer en raison de la complexité de la disposition des phéromones (deux cases se renvoyant mutuellement la fourmi).
+
+![image](https://user-images.githubusercontent.com/80055517/117124037-1bebbb00-ad98-11eb-8cbf-ae22c8e82c79.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117124091-2dcd5e00-ad98-11eb-8472-db54ae378181.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117124226-5c4b3900-ad98-11eb-8bf5-9f15dcc7245b.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117124268-6a995500-ad98-11eb-91b0-649bf4910249.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117124309-75ec8080-ad98-11eb-922b-c192d4dc47d6.png)
+
+Elle finit par se débloquer et retrouve un chemin.
+
+![image](https://user-images.githubusercontent.com/80055517/117124515-b6e49500-ad98-11eb-9806-a630d93fd700.png)
+
+Tandis que la première fourmi se retrouve à nouveau bloquée, une deuxième trouve la nourriture.
+
+![image](https://user-images.githubusercontent.com/80055517/117124685-f14e3200-ad98-11eb-8b5b-dcf3d179288c.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117124727-fb703080-ad98-11eb-8bc8-2af95b4d61dc.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117124778-0925b600-ad99-11eb-9cbc-c7d537eeeea8.png)
+
+Cette deuxième suit alors un autre chemin de phéromones maison qui ne mène pas directement à la fourmilière.
+
+![image](https://user-images.githubusercontent.com/80055517/117124999-4c802480-ad99-11eb-93bd-e5b2cdf160b8.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117125033-57d35000-ad99-11eb-9b96-5c2b3d664030.png)
+
+![image](https://user-images.githubusercontent.com/80055517/117125073-628de500-ad99-11eb-84cb-28c5bc024218.png)
+
+De nombreux tours plus tard, la première fourmi est tombée dans un piège et la deuxième est bloquée par plusieurs chemins de phéromones. Finalement, les phéromones maison autour d'elle disparaissent et elle perd entièrement le chemin de la fourmilière. On voit que de trop nombreux pièges déciment la population de fourmis et qu'une nourriture trop éloignée entraine une perte de chemin et un fouillis de phéromones qui s'enchevêtrent autour de la fourmilière.
+
+On peut alors en conclure que cette modélisation de fourmi ne reproduit le comportement des fourmis que dans des cas assez simplifiés, avec assez peu de fourmis, une nourriture proche et peu de dangers. On peut cependant comprendre qu'un lieu avantageux pour bâtir une colonie est proche d'une source de nourriture et relativement protégé, donc de ce point de vue là, le modèle n'est pas obsolète. Ce que cette expérience montre est que la recherche de nourriture à grande distance et par de nombreuses fourmis est bien plus complexe que les cas précédents. Il permet de questionner sur la validité du choix de direction des fourmis selon les valeurs de phéromones autour d'elles, celui-ci semble plus complexe que l'algorithme **choose_the_way** proposé (qui est pourtant déjà mûrement réfléchi). On touche alors aux limites de l'algorithme (et du programmateur...) qui ne reproduit le comportement des fourmis que dans un cadre simplifié. Cependant, dans ce cadre
+
 
 
 
