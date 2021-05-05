@@ -63,14 +63,14 @@ Pour s’assurer de la pertinence de la modélisation, nous comparerons le résu
 Nous avons pris les modules random et numpy pour modéliser notre projet. Nous avons décidé d'utiliser les matrices pour obtenir une vue de dessus, ce qui offre une meilleure compréhension de la fourmilière. De plus, ayant déjà travaillé avec numpy et les matrices, il nous était plus simple d’utiliser ces dernières, car mieux maîtrisée. 
 
 
-Pour modéliser de façon réalise notre fourmilière, nous avons recherché les notions importantes à connaître pour les fourmis.
+Pour modéliser de façon réaliste notre fourmilière, nous avons recherché les notions importantes à connaître concernant les fourmis.
  Les premières exploratrices cherchent de manière aléatoire un point de nourriture, une fois trouvé par une des fourmis, elle dépose des phéromones, une substance chimique, en rentrant au nid pour déposer la nourriture. Ce principe de phéromones est très important pour permettre aux fourmis de récupérer de la nourriture pour le nid.  
 Il y a autres mécanismes un peu moins importants, qui touche malgré tout la recherche de nourriture,  comme une durée de vie limitée pour les fourmis, et les prédateurs (modélisé dans notre cas, comme des pièges). 
-Ces explorations aléatoires et ces phéromones joue un grand rôle dans notre code, avec utilisation du module random, de fonctions sur les phéromones avec des formules mathématiquesreprésentant les phéromones. 
+Ces explorations aléatoires et ces phéromones joue un grand rôle dans notre code, avec utilisation du module random, de fonctions sur les phéromones avec des formules mathématiques représentant les phéromones. 
 
 ### Explication du code
 
-Tout d'abord nous avons listé l'ensemble des paramètres que nous allions utilisés et, au besoin, modifié. On a donc regroupé l'ensemble de ceux-ci dans une même case.
+Tout d'abord nous avons listé l'ensemble des paramètres que nous allions utiliser et, au besoin, modifier. On a donc regroupé l'ensemble de ceux-ci dans une même case.
 
 ![image](https://user-images.githubusercontent.com/80055517/117018918-4173b880-acf5-11eb-980d-8320636e688d.png)
 
@@ -1357,7 +1357,6 @@ On touche alors aux limites de l'algorithme (et du programmateur...) qui ne repr
 
 
 
-Présentation du choix de modélisation, des outils, du code et des résultats (tableaux, courbes, animations...) (**avec une analyse critique**).
 
 
 
