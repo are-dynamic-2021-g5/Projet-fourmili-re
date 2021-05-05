@@ -58,7 +58,9 @@ Pour s’assurer de la pertinence de la modélisation, nous comparerons le résu
 
 ## Présentation structurée des résultats
 
+### Présentation du modèle et des outils
 
+Nous avons pris les modules random et numpy pour modéliser notre projet. Nous avons décidé d'utiliser les matrices pour obtenir une vue de dessus, ce qui offre une meilleure compréhension de la fourmilière. De plus, ayant déjà travaillé avec numpy et les matrices, il nous était plus simple d’utiliser ces dernières, car mieux maîtrisée. 
 
 ### Explication du code
 
